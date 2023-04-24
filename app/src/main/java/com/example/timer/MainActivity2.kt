@@ -7,6 +7,7 @@ import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import com.example.timer.databinding.ActivityMain2Binding
 import java.util.*
 
@@ -38,6 +39,23 @@ class MainActivity2 : AppCompatActivity() {
                 binding.etWhatToDo.setText("")
                 binding.etTimeToDo.setText("")
             }
+
+            doingListView.setOnItemClickListener {parent, view, position, id ->
+                val alertDialog = AlertDialog.Builder(this)
+                    .setTitle("usuwanie elementu")
+                    .setMessage("czy na pewno chcesz usunąć element?")
+                    .setPositiveButton("Tak") {_,_ ->
+                        viewModel.doingList.removeAt(position)
+                        viewModel.timeList.removeAt(position)
+                        doingAdapter.notifyDataSetChanged()
+                        timeAdapter.notifyDataSetChanged()
+                    }
+                    .setNegativeButton("Nie", null)
+                    .create()
+                alertDialog.show()
+                true
+            }
+
         }
 
         binding.btnNext.setOnClickListener {
